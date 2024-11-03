@@ -45,6 +45,6 @@ plt.style.use('dark_background')
 plot = lorenzRK4(0, 1, 1, 14, 0.005, 60)
 fig = plt.figure(figsize = (10, 7))
 ax = plt.axes(projection = '3d')
-ax.scatter3D(np.array([i[1] for i in plot]), np.array([i[2] for i in plot]), np.array([i[3] for i in plot]), s=1, c=np.array([i[0] for i in plot]), cmap='RdPu_r')
+ax.scatter3D(plot[:,1], plot[:,2], plot[:,3], s=1, c=plot[:,0], cmap='RdPu_r')
 plt.show()
 
