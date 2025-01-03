@@ -41,10 +41,32 @@ def lorenzRK4(t, x, y, z, dt, domain):
         t += dt
     return np.array(points)
 
-plt.style.use('dark_background')
-plot = lorenzRK4(0, 1, 1, 14, 0.005, 60)
-fig = plt.figure(figsize = (10, 7))
-ax = plt.axes(projection = '3d')
-ax.scatter3D(plot[:,1], plot[:,2], plot[:,3], s=1, c=plot[:,0], cmap='RdPu_r')
-plt.show()
+def update(frame):
+    print(f'{100*step*frame/len(plots[0])}%')
+    for i in range(n):
+        x = plots[i][frame, 1]
+        z = plots[i][frame, 3]
+        ax.plot(x, z, linewidth=0.5, color=colours[i])
 
+plt.style.use('dark_background')
+n = 20
+plots = [lorenzRK4(0, 1-2*i/(n-1), 0, 0, 0.001, 60) for i in range(n)]
+step = 2
+plots = [np.array([plot[step*i] for i in range(10000, len(plot)//step)]) for plot in plots]
+colours = [(1-i/(n-1), 0.73*i/(n-1), 1) for i in range(n)]
+#fig = plt.figure(figsize = (10, 7))
+#ax = plt.axes(projection = '3d')
+fig, ax = plt.subplots()
+fig.set_dpi(1200)
+plt.axis('off')
+#ax.set_xlim([-25, 25])
+#ax.set_ylim([0, 60])
+for i in range(n):
+    plt.plot(plots[i][:,1], plots[i][:,3], linewidth=1, color=colours[i])
+#extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+#plt.savefig("test.png", bbox_inches=extent, dpi=500)
+plt.show()
+#ani.save(filename="lorenz.mp4", writer="ffmpeg", dpi=500)
+# for i in range(len(plots)):
+#     plot = plots[i]
+#     plt.plot(plot[:,1], plot[:,3], color=colours[i])
