@@ -51,7 +51,7 @@ def update(frame): ## used for animation
 ## Everything here is used for displaying the plot
 plt.style.use('dark_background')
 n = 20
-plots = [loopRK4(0, 1-2*i/(n-1), 0, 0, 0.001, 60) for i in range(n)]
+plots = [RK4loop(0, 1-2*i/(n-1), 0, 0, 0.001, 60) for i in range(n)]
 step = 2
 plots = [np.array([plot[step*i] for i in range(10000, len(plot)//step)]) for plot in plots]
 colours = [(1-i/(n-1), 0.73*i/(n-1), 1) for i in range(n)]
