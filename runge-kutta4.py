@@ -6,7 +6,7 @@ from matplotlib import cm
 from matplotlib.animation import FuncAnimation
 import time
 
-def RK4(t, x, y, z, dt, f, direction):
+def RK4(t, x, y, z, dt, f, direction): ## This calculates the derivatives at different points of the function and then returns a weighted average
     if direction == 'x':
         k1 = f(t, x, y, z)
         k2 = f(t+dt/2,x+k1*dt/2, y, z)
@@ -24,16 +24,16 @@ def RK4(t, x, y, z, dt, f, direction):
         k4 = f(t+dt, x, y, z+k3*dt)
     return k1+2*(k2+k3)+k4
 
-def xD1(t, x, y, z):
+def xD1(t, x, y, z): ## dx/dt
     return 10*(y-x)
 
-def yD1(t, x, y, z):
+def yD1(t, x, y, z): ## dy/dt
     return x*(28-z)-y
 
-def zD1(t, x, y, z):
+def zD1(t, x, y, z): ## dz/dt
     return x*y-8/3*z
 
-def lorenzRK4(t, x, y, z, dt, domain):
+def RK4loop(t, x, y, z, dt, domain): ## This is the loop that actually does the runge-kutta method
     points = [[t, x, y, z]]
     for i in range(int(domain/dt)):
         x, y, z = x+dt/6*RK4(t, x, y, z, dt, xD1, 'x'), y+dt/6*RK4(t, x, y, z, dt, yD1, 'y'), z+dt/6*RK4(t, x, y, z, dt, zD1, 'z')
@@ -41,13 +41,14 @@ def lorenzRK4(t, x, y, z, dt, domain):
         t += dt
     return np.array(points)
 
-def update(frame):
+def update(frame): ## used for animation
     print(f'{100*step*frame/len(plots[0])}%')
     for i in range(n):
         x = plots[i][frame, 1]
         z = plots[i][frame, 3]
         ax.plot(x, z, linewidth=0.5, color=colours[i])
 
+## Everything here is used for displaying the plot
 plt.style.use('dark_background')
 n = 20
 plots = [lorenzRK4(0, 1-2*i/(n-1), 0, 0, 0.001, 60) for i in range(n)]
